@@ -5,6 +5,7 @@ import { getSkipRecordCount } from '../utils/utils';
 import { SelectBuilder } from '@intacct/intacct-sdk/dist/Functions/Common/NewQuery/QuerySelect';
 import { Query } from '@intacct/intacct-sdk/dist/Functions/Common/NewQuery';
 import { customerFields } from '../utils/customer-field-mapping';
+import { Filter } from '@intacct/intacct-sdk/dist/Functions/Common/NewQuery/QueryFilter';
 
 class CustomerRepository {
 
@@ -130,6 +131,39 @@ class CustomerRepository {
         const result = response.getResult();
 
         return result;
+    }
+
+    async getCustomerById(customerId: string, companyId: string, userId: string) {
+
+        const client = await connectWithSage(companyId, userId);
+
+        const filter = new Filter(customerFields.customerId);
+        filter.equalTo(customerId);
+
+        const selectBuilder = new SelectBuilder();
+        selectBuilder.addFields([
+            customerFields.recordNo,
+            customerFields.customerId,
+            customerFields.customerName,
+            customerFields.lastName,
+            customerFields.firstName,
+            customerFields.primaryEmail,
+            customerFields.secondaryEmail
+        ]);
+        const selects = selectBuilder.selects;
+
+        let query = new Query();
+        query.selectFields = selects;
+        query.fromObject = "CUSTOMER";
+        query.filter = filter;
+        query.caseInsensitive = true;
+        query.pageSize = 1;
+
+        const response = await client.execute(query);
+        const result = response.getResult();
+
+        return result;
+
     }
 
 }

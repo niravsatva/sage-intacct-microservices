@@ -13,8 +13,17 @@ class CustomerService {
     }
 
     async getCustomerList(query: any, user: any) {
-        const data = await customerRepository.getCustomerList(query, user.companyId, user.userId)
-        return data;
+        const result = await customerRepository.getCustomerList(query, user.companyId, user.userId)
+        return result;
+    }
+
+    async getCustomerById(customerId: string, user: any) {
+        const result = await customerRepository.getCustomerById(customerId, user.companyId, user.userId);
+        if(result.data.length) {
+            return result;
+        }
+
+        throw new Error('Customer Not Found');
     }
 
 }

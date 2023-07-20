@@ -8,6 +8,8 @@ const router = express.Router();
 
 router.get('/list', jwtMiddleware, customerController.getCustomerList);
 
+router.get('/:customerId', jwtMiddleware, customerController.getCustomerById);
+
 router.post('/save', jwtMiddleware, [
     body('firstName').notEmpty().withMessage('First name is required'),
     body('lastName').notEmpty().withMessage('Last name is required'),

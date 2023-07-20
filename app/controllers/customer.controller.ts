@@ -13,6 +13,15 @@ export class CustomerController {
         }
     }
 
+    async getCustomerById(req: Request, res: Response): Promise<void> {
+        try {
+            const data = await customerService.getCustomerById(req.params.customerId, (req as any).user);
+            res.json({ result: data })
+        } catch (error: any) {
+            res.status(ResponseStatus.ERROR).json({ message: error.message })
+        }
+    }
+
     async createCustomer(req: Request, res: Response): Promise<void> {
         try {
             const data = await customerService.saveCustomer(req.body, (req as any).user);
