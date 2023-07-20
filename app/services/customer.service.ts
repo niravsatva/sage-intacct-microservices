@@ -1,4 +1,5 @@
 import { CustomerRequest } from '../models/customer.model';
+import { ResponseErrors } from '../models/error-messages.model';
 import { customerRepository } from '../repositories';
 
 class CustomerService {
@@ -23,7 +24,7 @@ class CustomerService {
             return result;
         }
 
-        throw new Error('Customer Not Found');
+        throw new Error(ResponseErrors.INVALID_CUSTOMER_ID);
     }
 
 }
